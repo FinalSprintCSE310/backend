@@ -1,2 +1,4 @@
 fastapi[standard]
-mysql-connector-python
+psycopg2
+uvicorn[standard]
+python-dotenv
