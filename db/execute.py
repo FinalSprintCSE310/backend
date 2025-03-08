@@ -1,9 +1,9 @@
 from dotenv import load_dotenv
 import os
-from connector import PostgresConnector
+from db.connector import PostgresConnector
 
 
-def Cursor():
+def ConnectionString():
     load_dotenv()
     USER = os.getenv("user")
     PASSWORD = os.getenv("password")
@@ -12,24 +12,39 @@ def Cursor():
     DBNAME = os.getenv("dbname")
 
     try:
-        Cursor = PostgresConnector(USER, PASSWORD, HOST, PORT, DBNAME).GetCursor()
-        return Cursor
+        Connection = PostgresConnector(USER, PASSWORD, HOST, PORT, DBNAME).GetConnection()
+        return Connection
     except:
         return False
 
-def QueryResult(Cursor, Query, Flag, Parameters = False):
+def QueryResult(Connection, Query, Flag, Parameters = False):
     try:
-        Fetch = Cursor()
+        Fetch = Connection.cursor()
         try:
             match Flag:
                 case 'Read':
-                    print("Happy")
+                    print("Read")
                     if not Parameters:
                         Fetch.execute(Query)
                     else:
                         Fetch.execute(Query, Parameters)
                     row = Fetch.fetchone()
                     return row
+                case 'ReadAll':
+                    print("Read All")
+                    if not Parameters:
+                        Fetch.execute(Query)
+                    else:
+                        Fetch.execute(Query, Parameters)
+                    rows = Fetch.fetchall()
+                    return rows
+                case 'Other':
+                    print('Insert Update Delete')
+                    try:
+                        Fetch.execute(Query, Parameters)
+                        Connection.commit()
+                    except:
+                        Connection.rollback()
         except:
             return False
     except:

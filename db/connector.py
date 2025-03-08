@@ -7,7 +7,7 @@ class PostgresConnector:
         self.Host = Host
         self.Port = Port
         self.Database = Database
-    def GetCursor(self):
+    def GetConnection(self):
         try:
             Connection = psycopg2.connect(
                 user=self.User,
@@ -18,7 +18,6 @@ class PostgresConnector:
             )
             print("Connection successful!")
             # Create a cursor to execute SQL queries
-            Cursor = Connection.cursor()
-            return Cursor
+            return Connection
         except:
             return False
