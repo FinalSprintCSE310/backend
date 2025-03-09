@@ -1,51 +1,26 @@
 from dotenv import load_dotenv
 import os
 from db.connector import PostgresConnector
+from psycopg2 import extras
 
 
-def ConnectionString():
+def GetCursor(Mode=False): # This mode parameter is False for Dev Environment and True for Production
     load_dotenv()
-    USER = os.getenv("user")
-    PASSWORD = os.getenv("password")
-    HOST = os.getenv("host")
-    PORT = os.getenv("port")
-    DBNAME = os.getenv("dbname")
-
+    if Mode is False:
+        USER = os.getenv("devuser")
+        PASSWORD = os.getenv("devpassword")
+        HOST = os.getenv("devhost")
+        PORT = os.getenv("devport")
+        DBNAME = os.getenv("devdbname")
+    else:
+        USER = os.getenv("user")
+        PASSWORD = os.getenv("password")
+        HOST = os.getenv("host")
+        PORT = os.getenv("port")
+        DBNAME = os.getenv("dbname")
     try:
         Connection = PostgresConnector(USER, PASSWORD, HOST, PORT, DBNAME).GetConnection()
-        return Connection
-    except:
-        return False
-
-def QueryResult(Connection, Query, Flag, Parameters = False):
-    try:
-        Fetch = Connection.cursor()
-        try:
-            match Flag:
-                case 'Read':
-                    print("Read")
-                    if not Parameters:
-                        Fetch.execute(Query)
-                    else:
-                        Fetch.execute(Query, Parameters)
-                    row = Fetch.fetchone()
-                    return row
-                case 'ReadAll':
-                    print("Read All")
-                    if not Parameters:
-                        Fetch.execute(Query)
-                    else:
-                        Fetch.execute(Query, Parameters)
-                    rows = Fetch.fetchall()
-                    return rows
-                case 'Other':
-                    print('Insert Update Delete')
-                    try:
-                        Fetch.execute(Query, Parameters)
-                        Connection.commit()
-                    except:
-                        Connection.rollback()
-        except:
-            return False
+        Cursor = Connection.cursor(cursor_factory=extras.DictCursor)
+        return Cursor
     except:
         return False
