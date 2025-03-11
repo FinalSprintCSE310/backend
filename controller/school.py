@@ -1,6 +1,6 @@
 from db.execute import GetCursor
 
-def GetAllSchoolsController():
+def GetAllSchools_Controller():
     Cursor = GetCursor()
     if not Cursor:
         return False
@@ -11,3 +11,19 @@ def GetAllSchoolsController():
         Cursor.close()
         return False
     return Rows[0][0]
+
+def CheckIfUserExist_Controller(Email: str):
+    Cursor = GetCursor(True)
+    if not Cursor:
+        return False
+    Cursor.execute(f'''SELECT
+    CASE
+        WHEN "Name" IS NOT NULL THEN true
+        ELSE false
+    END AS user_status_description
+FROM
+    "School"
+WHERE
+    "Email" = '{Email}';''')
+    Row = Cursor.fetchone()
+    print(Row)

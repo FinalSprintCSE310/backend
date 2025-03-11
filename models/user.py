@@ -1,14 +1,13 @@
 from pydantic import BaseModel
 
-class CreateSchool(BaseModel):
+class CreateSchool_Model(BaseModel):
     Name: str
-    Abb: str
+    Abbr: str
     Zip: int
     Email: str
-    MasterUser: str
-    MasterPass: str
+    Password: str
 
-class CreateUser(BaseModel):
+class CreateUser_Model(BaseModel):
     Firstname: str
     Lastname: str
     Email: str
@@ -16,3 +15,6 @@ class CreateUser(BaseModel):
     IsTeacher: bool
     IsStudent: bool
     IsParent: bool
+
+class TestModel(BaseModel):
+    Email: str
