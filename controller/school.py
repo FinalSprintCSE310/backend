@@ -12,8 +12,8 @@ def GetAllSchools_Controller():
         return False
     return Rows[0][0]
 
-def CheckIfUserExist_Controller(Email: str):
-    Cursor = GetCursor(True)
+def CheckIfUserExist_Controller(Search: str, Column: str):
+    Cursor = GetCursor()
     if not Cursor:
         return False
     Cursor.execute(f'''SELECT
@@ -24,6 +24,8 @@ def CheckIfUserExist_Controller(Email: str):
 FROM
     "School"
 WHERE
-    "Email" = '{Email}';''')
+    "{Column}" = '{Search}';''')
     Row = Cursor.fetchone()
-    print(Row)
+
+def AddNewSchoolAccount_Controller(Name: str, Abbr: str, Zip: int, Email: str, Password: str):
+    pass

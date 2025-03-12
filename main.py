@@ -2,15 +2,16 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 # Routes Imports
-from routes.register import Router as Register
-
+from routes.school import Router as School
+from routes.user import Router as User
 
 Server = FastAPI()
 
 Server.add_middleware(CORSMiddleware,allow_origins=["*"],allow_credentials=True,allow_methods=["*"],allow_headers=["*"])
 
 # Initiating the Routers that are being pulled from the Routes
-Server.include_router(Register, prefix='/api/register')
+Server.include_router(School, prefix='/api/v1/school')
+Server.include_router(User, prefix='/api/v1/user')
 
 
 @Server.get("/")

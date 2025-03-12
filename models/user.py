@@ -18,3 +18,4 @@ class CreateUser_Model(BaseModel):
 
 class TestModel(BaseModel):
     Email: str
+    Route: str
