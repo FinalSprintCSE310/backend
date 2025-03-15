@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Body, Response, status, HTTPException
-from controller.school import GetAllSchools_Controller, CheckIfUserExist_Controller
+from controller.school import GetAllSchools_Controller, CheckIfUserExist_Controller, AddNewSchoolAccount_Controller
 from models.user import CreateSchool_Model, TestModel
 Router = APIRouter()
 
@@ -11,16 +11,24 @@ async def GetAllSchools_Route():
     return Result
 
 @Router.post("/register")
-# async def CreateNewSchool_Route(School: CreateSchool_Model = Body(...)):
-async def CreateNewSchool_Route(School: TestModel = Body(...)):
-    Email = CheckIfUserExist_Controller(School.Email, "Email")
-    Route = CheckIfUserExist_Controller(School.Route, "Route")
-    if Route is not None:
-        return {'USER_EXIST'}
-    elif Email is not None:
+async def CreateNewSchool_Route(School: CreateSchool_Model = Body(...)):
+    Name = School.Name
+    Abbr = School.Abbr
+    Zip = School.Zip
+    Password = School.Password
+    Email = School.Email
+    EmailCheck = CheckIfUserExist_Controller(Email, "Email")
+    RouteCheck = CheckIfUserExist_Controller(Abbr+'-'+str(Zip), "Route")
+    if RouteCheck is not None:
+        return {'ORG_EXIST'}
+    elif EmailCheck is not None:
         return {'EMAIL_EXIST'}
     else:
-        return False
+        try:
+            AddNewSchoolAccount_Controller(Name, Abbr, Zip, Email, Password)
+            return Response(status_code=status.HTTP_201_CREATED)
+        except:
+            return Response(status_code=status.HTTP_400_BAD_REQUEST)
     
 """
 {
