@@ -1,6 +1,6 @@
-from fastapi import APIRouter, Body, Response, status, HTTPException
-from controller.school import GetAllSchools_Controller, CheckIfUserExist_Controller, AddNewSchoolAccount_Controller
-from models.user import CreateSchool_Model, TestModel
+from fastapi import APIRouter, Body, Response, status, HTTPException, Request
+from controller.school import GetAllSchools_Controller, CheckIfUserExist_Controller, AddNewSchoolAccount_Controller, SchoolLogin_Controller, SetSchoolLoginCookie_Controller
+from models.user import CreateSchool_Model, SchoolLogin_Model
 Router = APIRouter()
 
 @Router.get("/")
@@ -39,3 +39,21 @@ async def CreateNewSchool_Route(School: CreateSchool_Model = Body(...)):
     "Password" : string
 }
 """
+@Router.post("/login")
+async def LoginExistingSchool(response: Response, School: SchoolLogin_Model = Body(...)):
+    Email = School.Email
+    Password = School.Password
+    CheckAuth = SchoolLogin_Controller(Email, Password)
+    if CheckAuth is not None:
+        SetSchoolLoginCookie_Controller(CheckAuth[0], response)
+        return True
+    else:
+        return Response(status_code=status.HTTP_400_BAD_REQUEST)
+
+@Router.get("/login")
+async def GetCookieIfExist(request: Request):
+    Cookie = request.cookies.get("School_Session_Cookie", None)
+    if Cookie:
+        print(Cookie)
+        return True
+    return {"ORG_SESSION_EXPIRED"}

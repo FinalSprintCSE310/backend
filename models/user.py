@@ -7,6 +7,10 @@ class CreateSchool_Model(BaseModel):
     Email: str
     Password: str
 
+class SchoolLogin_Model(BaseModel):
+    Email: str
+    Password: str
+
 class CreateUser_Model(BaseModel):
     Firstname: str
     Lastname: str
