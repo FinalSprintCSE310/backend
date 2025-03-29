@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 # Routes Imports
 from routes.school import Router as School
 from routes.user import Router as User
+from routes.open import Router as Global
 
 Server = FastAPI()
 
@@ -12,6 +13,7 @@ Server.add_middleware(CORSMiddleware,allow_origins=["*"],allow_credentials=True,
 # Initiating the Routers that are being pulled from the Routes
 Server.include_router(School, prefix='/api/v1/school')
 Server.include_router(User, prefix='/api/v1/user')
+Server.include_router(Global, prefix='/api/v1/global')
 
 
 @Server.get("/")

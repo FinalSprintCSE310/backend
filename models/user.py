@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from datetime import date
 
 class CreateSchool_Model(BaseModel):
     Name: str
@@ -14,12 +15,15 @@ class SchoolLogin_Model(BaseModel):
 class CreateUser_Model(BaseModel):
     Firstname: str
     Lastname: str
+    Gender: str
+    DateOfBirth: date
     Email: str
     Password: str
-    IsTeacher: bool
-    IsStudent: bool
-    IsParent: bool
-
+    Role: str
+    SchoolId: int
+class UserLogin_Model(BaseModel):
+    Email: str
+    Password: str
 class TestModel(BaseModel):
     Email: str
     Route: str

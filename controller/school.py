@@ -2,19 +2,7 @@ from db.connector import PostgresConnector
 from db.execute import GetCursor
 from helper.helper import CreateSecretKey_Helper, HashPassword_Helper
 from fastapi import Response
-from datetime import datetime, timedelta
 
-def GetAllSchools_Controller():
-    Cursor = GetCursor()
-    if not Cursor:
-        return False
-    Cursor.execute("SELECT json_agg(json_build_object('name', name, 'abbrev', abbrev)) FROM pg_timezone_names;")
-    Rows = Cursor.fetchall()
-    print(Cursor.description)
-    if not Rows:
-        Cursor.close()
-        return False
-    return Rows[0][0]
 
 def CheckIfUserExist_Controller(Search: str, Column: str):
     Cursor = GetCursor()
@@ -30,6 +18,7 @@ FROM
 WHERE
     "{Column}" = '{Search}';''')
     Row = Cursor.fetchone()
+    return Row
 
 def AddNewSchoolAccount_Controller(Name: str, Abbr: str, Zip: int, Email: str, Password: str):
     Cursor = GetCursor()
@@ -47,13 +36,14 @@ def SchoolLogin_Controller(Email: str, Password: str):
     if not Cursor:
         return False
     Query = '''SELECT "Id" FROM "public"."School" WHERE "Email" = %s AND "Password" = %s'''
-    Values = (Email, Password)
+    Values = (Email, HashPassword_Helper(Password))
     Cursor.execute(Query, Values)
     Row = Cursor.fetchone()
+    print(Row)
     return Row
 
 def SetSchoolLoginCookie_Controller(SchoolId: int, response: Response):
-    Payload = {'SchoolId': SchoolId, 'IsAuthorized' : True}
+    Payload = {'SchoolId': SchoolId, 'IsAuthorized' : True, 'Role': 'School'}
     response.set_cookie(
         key="School_Session_Cookie",
         value=Payload,

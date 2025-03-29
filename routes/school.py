@@ -1,14 +1,7 @@
 from fastapi import APIRouter, Body, Response, status, HTTPException, Request
-from controller.school import GetAllSchools_Controller, CheckIfUserExist_Controller, AddNewSchoolAccount_Controller, SchoolLogin_Controller, SetSchoolLoginCookie_Controller
+from controller.school import CheckIfUserExist_Controller, AddNewSchoolAccount_Controller, SchoolLogin_Controller, SetSchoolLoginCookie_Controller
 from models.user import CreateSchool_Model, SchoolLogin_Model
 Router = APIRouter()
-
-@Router.get("/")
-async def GetAllSchools_Route():
-    Result = GetAllSchools_Controller()
-    if not Result:
-        return False
-    return Result
 
 @Router.post("/register")
 async def CreateNewSchool_Route(School: CreateSchool_Model = Body(...)):
@@ -38,9 +31,13 @@ async def CreateNewSchool_Route(School: CreateSchool_Model = Body(...)):
     "Email" : string,
     "Password" : string
 }
+{
+    "Email": string,
+    "Password": string
+}
 """
 @Router.post("/login")
-async def LoginExistingSchool(response: Response, School: SchoolLogin_Model = Body(...)):
+async def LoginExistingSchool_Route(response: Response, School: SchoolLogin_Model = Body(...)):
     Email = School.Email
     Password = School.Password
     CheckAuth = SchoolLogin_Controller(Email, Password)
@@ -51,9 +48,11 @@ async def LoginExistingSchool(response: Response, School: SchoolLogin_Model = Bo
         return Response(status_code=status.HTTP_400_BAD_REQUEST)
 
 @Router.get("/login")
-async def GetCookieIfExist(request: Request):
+async def GetCookieIfExist_Route(request: Request):
     Cookie = request.cookies.get("School_Session_Cookie", None)
     if Cookie:
         print(Cookie)
         return True
     return {"ORG_SESSION_EXPIRED"}
+
+# Create a dashboard and should have details about, Students & Parents (Just Show all their Info), Faculty(Info and all the classes they teach), Auth(Students, Parents, Teachers)

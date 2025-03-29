@@ -17,3 +17,8 @@ def CheckPassword_Helper(Password, UserInput):
         return True
     else: 
         return False
+    
+def GetColumnsJSON_Helper(Cursor, Rows):
+    Columns = [desc[0] for desc in Cursor.description]
+    JsonRows = [dict(zip(Columns, Row)) for Row in Rows]
+    return JsonRows
