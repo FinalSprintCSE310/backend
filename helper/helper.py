@@ -1,6 +1,7 @@
 from secrets import token_hex
 from os import urandom
 import hashlib as hash
+from fastapi import Request
 
 def CreateSecretKey_Helper(Length = 128):
     try:
@@ -22,3 +23,6 @@ def GetColumnsJSON_Helper(Cursor, Rows):
     Columns = [desc[0] for desc in Cursor.description]
     JsonRows = [dict(zip(Columns, Row)) for Row in Rows]
     return JsonRows
+
+def GetSchoolIdFromCookie(request):
+    return eval(request.cookies.get("School_Session_Cookie", None))['SchoolId']

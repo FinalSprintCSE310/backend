@@ -60,3 +60,15 @@ async def GetCookieIfExist_Route(request: Request):
         print(Cookie)
         return True
     return {"USER_SESSION_EXPIRED"}
+
+"""
+User Login:-
+email: ashish@email.com
+password: ashish@123
+
+email: sarah@email.com
+password: sarah@123
+
+email: albert@email.com
+password: albert@123
+"""

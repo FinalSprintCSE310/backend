@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from routes.school import Router as School
 from routes.user import Router as User
 from routes.open import Router as Global
+from routes.dashboard import Router as Dashboard
 
 Server = FastAPI()
 
@@ -14,6 +15,7 @@ Server.add_middleware(CORSMiddleware,allow_origins=["*"],allow_credentials=True,
 Server.include_router(School, prefix='/api/v1/school')
 Server.include_router(User, prefix='/api/v1/user')
 Server.include_router(Global, prefix='/api/v1/global')
+Server.include_router(Dashboard, prefix='/api/v1/dashboard')
 
 
 @Server.get("/")

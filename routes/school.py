@@ -56,3 +56,9 @@ async def GetCookieIfExist_Route(request: Request):
     return {"ORG_SESSION_EXPIRED"}
 
 # Create a dashboard and should have details about, Students & Parents (Just Show all their Info), Faculty(Info and all the classes they teach), Auth(Students, Parents, Teachers)
+
+"""
+School Login:-
+email: bhs@idaho.gov
+password: bhs@123
+"""
