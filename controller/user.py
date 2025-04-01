@@ -2,6 +2,7 @@ from db.execute import GetCursor
 from helper.helper import CreateSecretKey_Helper, HashPassword_Helper
 from datetime import date
 from fastapi import Response
+from json import dumps
 
 
 def AddNewUserAccount_Controller(Firstname: str, Lastname: str, Gender: str, DateOfBirth: date, Email: str, Password: str, Role: str, SchoolId: int):
@@ -47,8 +48,8 @@ def SetUserLoginCookie_Controller(UserId: int, UserRole: str, response: Response
     response.set_cookie(
         key="User_Session_Cookie",
         value=Payload,
-        max_age=3600,
         httponly=True,
         secure=True,
-        samesite="None"
+        max_age=3600,
+        samesite="lax"
     )

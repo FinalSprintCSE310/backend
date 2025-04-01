@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Body, Response, status, HTTPException, Request
 from controller.user import AddNewUserAccount_Controller, CheckIfUserExist_Controller, UserLogin_Controller, SetUserLoginCookie_Controller
 from models.user import CreateUser_Model, UserLogin_Model
+from datetime import datetime, timedelta, timezone
 
 
 Router = APIRouter()
@@ -61,6 +62,11 @@ async def GetCookieIfExist_Route(request: Request):
         return True
     return {"USER_SESSION_EXPIRED"}
 
+@Router.get("/logout")
+async def LogoutExistingUser_Route(request: Request, response: Response):
+    response.delete_cookie(key="User_Session_Cookie")
+    return True
+
 """
 User Login:-
 email: ashish@email.com
@@ -71,4 +77,21 @@ password: sarah@123
 
 email: albert@email.com
 password: albert@123
+"""
+
+"""
+const xhr = new XMLHttpRequest();
+xhr.open('POST', 'http://localhost:8000/api/v1/user/login');
+xhr.setRequestHeader('Content-Type', 'application/json');
+xhr.onload = function () {
+  if (xhr.status >= 200 && xhr.status < 300) {
+    console.log('Success:', JSON.parse(xhr.responseText));
+  } else {
+    console.error('Error:', xhr.status, xhr.statusText);
+  }
+};
+xhr.onerror = function () {
+  console.error('Network Error');
+};
+xhr.send(JSON.stringify({ Email: 'ashish@email.com', Password: 'ashish@123' }));
 """
